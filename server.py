@@ -16,21 +16,35 @@ class Cache(protocol.Protocol):
         result = getattr(self.factory, command)(**request)
         self.transport.write(result + "\n")
 
+def status(fun):
+    def execute(self, **kwargs):
+        print '%s called' % (fun.__name__,)
+        result = {'status': 'ok'}
+        raw = fun(self, **kwargs)
+        if raw != None:
+            result['response'] = raw
+        return json.dumps(result)
+    return execute
+
 class CacheFactory(protocol.Factory):
     def __init__(self):
         self.data = {}
     def buildProtocol(self, addr):
         return Cache(self)
+    @status
     def handle_get(self, key):
-        return json.dumps(self.data[key])
+        return self.data[key]
+    @status
     def handle_set(self, key, value):
         self.data[key] = value
-        return json.dumps({"status":"ok"})
+        return
+    @status
     def handle_delete(self, key):
         self.data.pop(key)
-        return json.dumps({"status":"ok"})
+        return
+    @status
     def handle_count(self):
-        return json.dumps(len(self.data))
+        return len(self.data)
 
 reactor.listenTCP(int(sys.argv[1]), CacheFactory())
 reactor.run()
