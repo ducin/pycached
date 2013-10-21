@@ -22,7 +22,7 @@ def status(fun):
         result = {'status': 'ok'}
         raw = fun(self, **kwargs)
         if raw != None:
-            result['response'] = raw
+            result['value'] = raw
         return json.dumps(result)
     return execute
 

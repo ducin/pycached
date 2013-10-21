@@ -30,8 +30,10 @@ class PyCachedClient {
     protected function execute($request) {
         $message = json_encode($request);
         $this->write($message);
-        $response = $this->read();
-        return json_decode($response, true);
+        $response = json_decode($this->read(), true);
+        if ($response['status'] != 'ok')
+            throw new \Exception('Something went wrong with PyCached.');
+        return isset($response['value']) ? $response['value'] : NULL;
     }
 
     public function version() {
