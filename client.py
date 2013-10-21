@@ -12,11 +12,14 @@ class PycachedClient(object):
         return json.loads(received.rstrip('\n'))
     def _send(self, request):
         self.s.sendall(json.dumps(request))
+    def version(self, key):
+        self._send({'command':'version'})
+        return self._receive()
     def get(self, key):
         self._send({'command':'get', 'key':key})
         return self._receive()
     def set(self, key, value):
-        self._send({'command':'set', 'key':key, 'value': value})
+        self._send({'command':'set', 'key':key, 'value':value})
         return self._receive()
     def delete(self, key):
         self._send({'command':'delete', 'key':key})

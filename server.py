@@ -27,10 +27,14 @@ def status(fun):
     return execute
 
 class CacheFactory(protocol.Factory):
+    version = '1.0-alpha'
     def __init__(self):
         self.data = {}
     def buildProtocol(self, addr):
         return Cache(self)
+    @status
+    def handle_version(self):
+        return CacheFactory.version
     @status
     def handle_get(self, key):
         return self.data[key]
