@@ -2,6 +2,13 @@
 
 namespace PyCached;
 
+/**
+ * PyCached PHP Client class. Connects to pycached service on given host,port
+ * and manipulates cache data.
+ *
+ * @author Tomaz Ducin <tomasz.ducin@gmail.com>
+ * @version 1.0
+ */
 class PyCachedClient {
     private $buffer_size = 2048;
 
