@@ -4,7 +4,7 @@ python:
   - "2.7"
 before_install:
   - sudo apt-get update
-  - sudo apt-get install php5
+  - sudo apt-get install php5 phpunit
 install:
   - pip install -r requirements.txt --use-mirrors
 before_script: ./server.py 12345 &
