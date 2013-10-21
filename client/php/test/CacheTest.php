@@ -48,4 +48,15 @@ class CacheTest extends PHPUnit_Framework_TestCase
         $response = $this->client->count();
         $this->assertSame(0, $response);
     }
+
+    public function testNestedStructures()
+    {
+        $value = range(1, 10);
+        $this->client->set('nested', $value);
+
+        $response = $this->client->get('nested');
+        $this->assertSame($response, $value);
+
+        $this->client->delete('nested');
+    }
 }

@@ -4,7 +4,7 @@ python:
   - "2.7"
 before_install:
   - sudo apt-get update
-  - sudo apt-get install python-twisted php5 pear
+  - sudo apt-get install python-twisted php5 php-pear
   - sudo pear channel-discover pear.phpunit.de
   - sudo pear channel-discover pear.symfony-project.com
   - sudo pear channel-discover components.ez.no
