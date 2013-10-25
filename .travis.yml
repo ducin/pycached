@@ -5,6 +5,7 @@ python:
 before_install:
   - sudo apt-get update
   - sudo apt-get install python-twisted php-pear
+# sequence of phpunit installation commands
   - sudo pear channel-discover pear.phpunit.de
   - sudo pear channel-discover pear.symfony-project.com
   - sudo pear channel-discover components.ez.no
@@ -12,10 +13,12 @@ before_install:
   - sudo pear upgrade-all
   - sudo pear install --alldeps phpunit/PHPUnit
   - sudo pear install --force --alldeps phpunit/PHPUnit
+# setting pythonpath to enable python client module loading
+  - export PYTHONPATH="$PYTHONPATH:`pwd`/client/python"
 install:
   - pip install -r requirements.txt --use-mirrors
 before_script: ./server.py 12345 &
 after_script: pkill -9 -f "server.py"
 script:
   - cd client/php && phpunit && cd ../..
-  - nosetests --nocapture
+  - nosetests --nocapture client/python

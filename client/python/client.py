@@ -1,18 +1,17 @@
-#!/usr/bin/python
-import sys, errno
 import socket
 import json
 
-class PycachedClient(object):
+class PyCachedClient(object):
     def __init__(self, host, port):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.connect((host, port))
     def _receive(self):
         received = self.s.recv(1024)
-        return json.loads(received.rstrip('\n'))
+        decoded = json.loads(received.rstrip('\n'))
+        return decoded['value'] if decoded['value'] else None
     def _send(self, request):
         self.s.sendall(json.dumps(request))
-    def version(self, key):
+    def version(self):
         self._send({'command':'version'})
         return self._receive()
     def get(self, key):
@@ -29,11 +28,3 @@ class PycachedClient(object):
         return self._receive()
     def close(self):
         self.s.close()
-
-if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print "Usage: ./client.py <host> <port>\n"
-        sys.exit(errno.EINVAL)
-    host = sys.argv[1]
-    port = int(sys.argv[2])
-    pc = PycachedClient(host, port)
