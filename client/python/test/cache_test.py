@@ -2,8 +2,10 @@ import unittest
 from client import PyCachedClient
 
 class MainTest (unittest.TestCase):
+    def setUp(self):
+        self.client = PyCachedClient('localhost', 12345)
+    def tearDown(self):
+        self.client.close()
     def test_run(self):
-        client = PyCachedClient('localhost', 12345)
-        version = client.version()
-        self.assertIsInstance(version, unicode)
-        client.close()
+        version = self.client.version()
+        self.assertTrue(type(version) is unicode)
