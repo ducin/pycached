@@ -5,13 +5,14 @@ python:
 before_install:
   - sudo apt-get update
   - sudo apt-get install python-twisted php5 php-pear
+  - sudo apt-get remove phpunit
   - sudo pear channel-discover pear.phpunit.de
   - sudo pear channel-discover pear.symfony-project.com
   - sudo pear channel-discover components.ez.no
   - sudo pear update-channels
   - sudo pear upgrade-all
   - sudo pear install --alldeps phpunit/PHPUnit
-  - sudo apt-get install phpunit
+  - sudo pear install --force --alldeps phpunit/PHPUnit
 install:
   - pip install -r requirements.txt --use-mirrors
 before_script: ./server.py 12345 &
