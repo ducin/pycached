@@ -18,5 +18,5 @@ install:
 before_script: ./server.py 12345 &
 after_script: pkill -9 -f "server.py"
 script:
-  - cd client/php; phpunit; cd ../..
+  - cd client/php && phpunit && cd ../..
   - nosetests --nocapture

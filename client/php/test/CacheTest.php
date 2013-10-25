@@ -59,4 +59,9 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
         $this->client->delete('nested');
     }
+
+    public function testAndFail()
+    {
+        $this->assertTrue(false);
+    }
 }
