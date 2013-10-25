@@ -16,6 +16,28 @@ class MainTest (unittest.TestCase):
         count = self.client.count()
         self.assertEqual(count, 0)
 
+    def test_simple_sequence(self):
+        response = self.client.count()
+        self.assertEqual(0, response)
+
+        self.client.set('john', 'doe')
+        response = self.client.count()
+        self.assertEqual(1, response)
+
+        response = self.client.get('john')
+        self.assertEqual('doe', response)
+
+        self.client.set('john', 'lennon')
+        response = self.client.count()
+        self.assertEqual(1, response)
+
+        response = self.client.get('john')
+        self.assertEqual('lennon', response)
+
+        self.client.delete('john')
+        response = self.client.count()
+        self.assertEqual(0, response)
+
     def test_nested(self):
         value = range(1, 10)
         self.client.set('nested', value)
