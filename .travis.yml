@@ -11,6 +11,7 @@ before_install:
   - sudo pear update-channels
   - sudo pear upgrade-all
   - sudo pear install --alldeps phpunit/PHPUnit
+  - sudo apt-get install phpunit
 install:
   - pip install -r requirements.txt --use-mirrors
 before_script: ./server.py 12345 &
