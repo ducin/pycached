@@ -42,6 +42,10 @@ class PyCachedClient(object):
         self._send('items')
         return self._receive()
 
+    def status(self):
+        self._send('status')
+        return self._receive()
+
     def get(self, key):
         self._send('get', {'key':key})
         return self._receive()

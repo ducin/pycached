@@ -61,6 +61,10 @@ class PyCachedClient {
         return $this->execute('items');
     }
 
+    public function status() {
+        return $this->execute('status');
+    }
+
     public function set($key, $value) {
         $options = array('key' => $key, 'value' => $value);
         return $this->execute('set', $options);

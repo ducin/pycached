@@ -24,6 +24,11 @@ class MainTest (unittest.TestCase):
         version = self.client.version()
         self.assertTrue(type(version) is unicode)
 
+    def test_status(self):
+        status = self.client.status()
+        self.assertTrue(status.has_key('uptime'))
+        self.assertTrue(type(status['uptime']) is float)
+
     def test_empty(self):
         self.assertCacheCount(0)
 

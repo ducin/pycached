@@ -23,14 +23,18 @@ class CacheTest extends PHPUnit_Framework_TestCase
         $this->assertSame($expected, $count);
     }
 
-    public function testVersion()
-    {
+    public function testVersion() {
         $response = $this->client->version();
         $this->assertInternalType('string', $response);
     }
 
-    public function testEmpty()
-    {
+    public function testStatus() {
+        $status = $this->client->status();
+        $this->assertArrayHasKey('uptime', $status);
+        $this->assertInternalType('float', $status['uptime']);
+    }
+
+    public function testEmpty() {
         $this->assertCacheCount(0);
     }
 
@@ -41,8 +45,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
         $this->assertCacheCount($elements);
     }
 
-    public function testSimpleSequence()
-    {
+    public function testSimpleSequence() {
         $this->assertCacheCount(0);
 
         $this->client->set('john', 'doe');
@@ -61,8 +64,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
         $this->assertCacheCount(0);
     }
 
-    public function testNestedStructures()
-    {
+    public function testNestedStructures() {
         $value = range(1, 10);
         $this->client->set('nested', $value);
 

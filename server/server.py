@@ -8,15 +8,6 @@ from time import mktime
 from datetime import datetime
 from twisted.internet import protocol
 
-class Cache(protocol.Protocol):
-    def __init__(self, factory):
-        self.factory = factory
-    def dataReceived(self, data):
-        request = json.loads(data)
-        command = "handle_%s" % (request.pop('command'),)
-        result = getattr(self.factory, command)(**request)
-        self.transport.write(result + "\n")
-
 class CacheEncoder(json.JSONEncoder):
     def datetime_to_string(self, d):
         return str(d)
@@ -29,7 +20,6 @@ class CacheEncoder(json.JSONEncoder):
 
 def status(fun):
     def execute(self, **kwargs):
-        print '%s called' % (fun.__name__,)
         result = {'status': 'ok'}
         raw = fun(self, **kwargs)
         if raw != None:
@@ -37,9 +27,26 @@ def status(fun):
         return json.dumps(result, cls=CacheEncoder)
     return execute
 
+class Cache(protocol.Protocol):
+    def __init__(self, factory, verbose):
+        self.factory = factory
+        self.verbose = verbose
+    def dataReceived(self, data):
+        if self.verbose:
+            print 'received: %s' % (data,)
+        request = json.loads(data)
+        if self.verbose:
+            print 'request: %s' % (request,)
+        command = "handle_%s" % (request.pop('command'),)
+        if self.verbose:
+            print 'command: %s\n' % (command,)
+        result = getattr(self.factory, command)(**request)
+        self.transport.write(result + "\n")
+
 class CacheFactory(protocol.Factory):
     def __init__(self):
         self.clear()
+        self.start_time = datetime.now()
 
     def clear(self):
         '''
@@ -51,7 +58,7 @@ class CacheFactory(protocol.Factory):
         '''
         Returns instance of PyCached protocol
         '''
-        return Cache(self)
+        return Cache(self, True)
 
     @status
     def handle_version(self):
@@ -69,6 +76,10 @@ class CacheFactory(protocol.Factory):
     @status
     def handle_items(self):
         return self.data
+
+    @status
+    def handle_status(self):
+        return {'uptime': (datetime.now() - self.start_time).total_seconds()}
 
     @status
     def handle_get(self, key):
