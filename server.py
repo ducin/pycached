@@ -41,11 +41,11 @@ class CacheFactory(protocol.Factory):
 
     @status
     def handle_get(self, key):
-        return self.data[key]
+        return self.data[key][0]
 
     @status
     def handle_set(self, key, value):
-        self.data[key] = value
+        self.data[key] = [value]
         return
 
     @status
