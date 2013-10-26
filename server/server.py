@@ -44,21 +44,28 @@ class Cache(protocol.Protocol):
         self.transport.write(result + "\n")
 
 class CacheFactory(protocol.Factory):
-    def __init__(self):
+    def __init__(self, verbose=False):
         self.clear()
         self.start_time = datetime.now()
+        self.verbose = False
 
     def clear(self):
         '''
-        Clears entire cache
+        Clears entire cache.
         '''
         self.data = {}
 
     def buildProtocol(self, addr):
         '''
-        Returns instance of PyCached protocol
+        Returns instance of PyCached protocol.
         '''
-        return Cache(self, True)
+        return Cache(self, self.verbose)
+
+    def setVerbosity(self, verbose):
+        '''
+        Sets verbosity. It will be passed to each cache protocol instance.
+        '''
+        self.verbose = verbose
 
     @status
     def handle_version(self):
