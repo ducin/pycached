@@ -6,10 +6,11 @@ namespace PyCached;
  * PyCached PHP Client class. Connects to pycached service on given host,port
  * and manipulates cache data.
  *
- * @author Tomaz Ducin <tomasz.ducin@gmail.com>
- * @version 1.0
+ * @author Tomasz Ducin <tomasz.ducin@gmail.com>
+ * @version 1.1
  */
 class PyCachedClient {
+
     private $buffer_size = 2048;
 
     public function __construct() {
@@ -34,7 +35,8 @@ class PyCachedClient {
         return socket_read($this->_socket, $this->buffer_size);
     }
 
-    protected function execute($request) {
+    protected function execute($command, $options = array()) {
+        $request = array_merge(array('command' => $command), $options);
         $message = json_encode($request);
         $this->write($message);
         $response = json_decode($this->read(), true);
@@ -44,28 +46,34 @@ class PyCachedClient {
     }
 
     public function version() {
-        $request = array('command' => 'version');
-        return $this->execute($request);
+        return $this->execute('version');
     }
 
     public function count() {
-        $request = array('command' => 'count');
-        return $this->execute($request);
+        return $this->execute('count');
+    }
+
+    public function clear() {
+        return $this->execute('clear');
+    }
+
+    public function items() {
+        return $this->execute('items');
     }
 
     public function set($key, $value) {
-        $request = array('command' => 'set', 'key' => $key, 'value' => $value);
-        return $this->execute($request);
+        $options = array('key' => $key, 'value' => $value);
+        return $this->execute('set', $options);
     }
 
     public function get($key) {
-        $request = array('command' => 'get', 'key' => $key);
-        return $this->execute($request);
+        $options = array('key' => $key);
+        return $this->execute('get', $options);
     }
 
     public function delete($key) {
-        $request = array('command' => 'delete', 'key' => $key);
-        return $this->execute($request);
+        $options = array('key' => $key);
+        return $this->execute('delete', $options);
     }
 
 }

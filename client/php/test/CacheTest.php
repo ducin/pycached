@@ -7,10 +7,20 @@ class CacheTest extends PHPUnit_Framework_TestCase
     protected function setUp() {
         $this->client = new PyCachedClient;
         $this->client->connect('localhost', 12345);
+        $this->client->clear();
     }
 
     protected function tearDown() {
         $this->client->close();
+    }
+
+    protected function getRandomHash($length) {
+        return substr(md5(rand().time()), 0, $length);
+    }
+
+    protected function assertCacheCount($expected) {
+        $count = $this->client->count();
+        $this->assertSame($expected, $count);
     }
 
     public function testVersion()
@@ -21,32 +31,34 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
     public function testEmpty()
     {
-        $response = $this->client->count();
-        $this->assertSame(0, $response);
+        $this->assertCacheCount(0);
+    }
+
+    public function testClear() {
+        $elements = 10;
+        foreach(range(0, $elements - 1) as $i)
+            $this->client->set($this->getRandomHash(32), $i);
+        $this->assertCacheCount($elements);
     }
 
     public function testSimpleSequence()
     {
-        $response = $this->client->count();
-        $this->assertSame(0, $response);
+        $this->assertCacheCount(0);
 
         $this->client->set('john', 'doe');
-        $response = $this->client->count();
-        $this->assertSame(1, $response);
+        $this->assertCacheCount(1);
 
         $response = $this->client->get('john');
         $this->assertSame('doe', $response);
 
         $this->client->set('john', 'lennon');
-        $response = $this->client->count();
-        $this->assertSame(1, $response);
+        $this->assertCacheCount(1);
 
         $response = $this->client->get('john');
         $this->assertSame('lennon', $response);
 
         $this->client->delete('john');
-        $response = $this->client->count();
-        $this->assertSame(0, $response);
+        $this->assertCacheCount(0);
     }
 
     public function testNestedStructures()
@@ -56,7 +68,5 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
         $response = $this->client->get('nested');
         $this->assertSame($response, $value);
-
-        $this->client->delete('nested');
     }
 }
