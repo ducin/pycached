@@ -1,19 +1,12 @@
-#!/usr/bin/python
-
 __author__ = "Tomasz Ducin"
 __email__ = "tomasz.ducin@gmail.com"
 __license__ = "MIT"
 __version__ = "1.1"
 
-import sys, errno
 import json
 from time import mktime
 from datetime import datetime
-from twisted.internet import protocol, reactor
-
-if len(sys.argv) != 2:
-    print "Usage: ./server.py <port>\n"
-    sys.exit(errno.EINVAL)
+from twisted.internet import protocol
 
 class Cache(protocol.Protocol):
     def __init__(self, factory):
@@ -45,8 +38,6 @@ def status(fun):
     return execute
 
 class CacheFactory(protocol.Factory):
-    version = '1.1'
-
     def __init__(self):
         self.clear()
 
@@ -64,7 +55,7 @@ class CacheFactory(protocol.Factory):
 
     @status
     def handle_version(self):
-        return CacheFactory.version
+        return __version__
 
     @status
     def handle_count(self):
@@ -94,6 +85,3 @@ class CacheFactory(protocol.Factory):
     def handle_delete(self, key):
         self.data.pop(key)
         return
-
-reactor.listenTCP(int(sys.argv[1]), CacheFactory())
-reactor.run()
