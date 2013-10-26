@@ -1,4 +1,5 @@
 import socket
+import errno
 import json
 
 __author__ = "Tomasz Ducin"
@@ -11,7 +12,10 @@ class PyCachedClient(object):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect(self, host, port):
-        self.s.connect((host, port))
+        try:
+            self.s.connect((host, port))
+        except socket.error:
+            raise RuntimeError('Something went wrong with PyCached.')
 
     def close(self):
         self.s.close()
