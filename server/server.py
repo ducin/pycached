@@ -47,7 +47,7 @@ class CacheFactory(protocol.Factory):
     def __init__(self, verbose=False):
         self.clear()
         self.start_time = datetime.now()
-        self.verbose = False
+        self.verbose = verbose
 
     def clear(self):
         '''
