@@ -8,7 +8,7 @@ from time import mktime
 from datetime import datetime
 from twisted.internet import protocol
 
-class CacheEncoder(json.JSONEncoder):
+class PyCachedEncoder(json.JSONEncoder):
     def datetime_to_string(self, d):
         return str(d)
     def datetime_to_timestamp(self, d):
@@ -24,10 +24,10 @@ def status(fun):
         raw = fun(self, **kwargs)
         if raw != None:
             result['value'] = raw
-        return json.dumps(result, cls=CacheEncoder)
+        return json.dumps(result, cls=PyCachedEncoder)
     return execute
 
-class Cache(protocol.Protocol):
+class PyCached(protocol.Protocol):
     def __init__(self, factory, verbose):
         self.factory = factory
         self.verbose = verbose
@@ -43,7 +43,7 @@ class Cache(protocol.Protocol):
         result = getattr(self.factory, command)(**request)
         self.transport.write(result + "\n")
 
-class CacheFactory(protocol.Factory):
+class PyCachedFactory(protocol.Factory):
     def __init__(self, verbose=False):
         self.clear()
         self.start_time = datetime.now()
@@ -59,7 +59,7 @@ class CacheFactory(protocol.Factory):
         '''
         Returns instance of PyCached protocol.
         '''
-        return Cache(self, self.verbose)
+        return PyCached(self, self.verbose)
 
     def setVerbosity(self, verbose):
         '''

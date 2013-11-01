@@ -1,11 +1,17 @@
 #!/usr/bin/python
-import sys, errno
-from server.server import CacheFactory
+import argparse
+
 from twisted.internet import reactor
 
-if len(sys.argv) != 2:
-    print "Usage: ./run.py <port>\n"
-    sys.exit(errno.EINVAL)
+from server.server import PyCachedFactory
 
-reactor.listenTCP(int(sys.argv[1]), CacheFactory())
+parser = argparse.ArgumentParser(description='Run PyCached server.')
+parser.add_argument('port', metavar='port', type=int,
+    help='PyCached service port')
+parser.add_argument('--http-port', metavar='http-port', type=int, default=None,
+    help='PyCached http access port')
+args = parser.parse_args()
+
+print "Starting PyCached service on port %d" % (args.port)
+reactor.listenTCP(args.port, PyCachedFactory())
 reactor.run()
