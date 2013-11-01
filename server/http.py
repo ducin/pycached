@@ -11,6 +11,13 @@ host, port = 'localhost', 12345
 class PyCachedCommand(Resource):
     isLeaf = True
 
+    cors_headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Max-Age': 3600
+    }
+
     def render_GET(self, request):
         client = PyCachedClient()
         try:
@@ -27,9 +34,9 @@ class PyCachedCommand(Resource):
         kwargs = {k: v[0] for k,v in request.args.iteritems()}
         command_name = kwargs.pop('command')
         command = getattr(client, command_name)
+        result = str(command(**kwargs))
+        client.close()
         request.setHeader('Content-Type', 'text/plain')
-        request.setHeader('Access-Control-Allow-Origin', '*')
-        request.setHeader('Access-Control-Allow-Methods', '*')
-        request.setHeader('Access-Control-Allow-Headers', '*')
-        request.setHeader('Access-Control-Max-Age', 3600)
-        return str(command(**kwargs))
+        for header, value in PyCachedCommand.cors_headers.iteritems():
+            request.setHeader(header, value)
+        return result
