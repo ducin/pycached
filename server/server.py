@@ -1,7 +1,7 @@
 __author__ = "Tomasz Ducin"
 __email__ = "tomasz.ducin@gmail.com"
 __license__ = "MIT"
-__version__ = "1.1"
+__version__ = "1.2"
 
 import json
 from time import mktime

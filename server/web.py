@@ -1,37 +1,39 @@
-import cherrypy
+from twisted.internet import reactor
+from twisted.web.resource import Resource
+from twisted.web.server import Site
+
 from client import PyCachedClient
 
-class PyCachedAdmin(object):
-    exposed = True
+host, port = 'localhost', 12345
 
-    def GET(self):
+class PyCachedCommand(Resource):
+    isLeaf = True
+    def render_GET(self, request):
         client = PyCachedClient()
         try:
-            client.connect('localhost', 12345)
+            client.connect(host, port)
             status = client.status()
             client.close()
             return "PyCached is up since %0.2f seconds" % (status['uptime'],)
         except:
             return "PyCached is down."
 
-    def POST(self, **kwargs):
+    def render_POST(self, request):
         client = PyCachedClient()
-        try:
-            client.connect('localhost', 12345)
-            command_name = kwargs.pop('command')
-            command = getattr(client, command_name)
-            CORS()
-            return command(**kwargs)
-        except:
-            return "Invalid command"
+        client.connect(host, port)
+        kwargs = {k: v[0] for k,v in request.args.iteritems()}
+        print kwargs
+        command_name = kwargs.pop('command')
+        print command_name
+        command = getattr(client, command_name)
+        print command
+        request.setHeader('Content-Type', 'text/html')
+        request.setHeader('Access-Control-Allow-Origin', '*')
+        request.setHeader('Access-Control-Allow-Methods', '*')
+        request.setHeader('Access-Control-Allow-Headers', '*')
+        request.setHeader('Access-Control-Max-Age', 3600)
+        return str(command(**kwargs))
 
-def CORS():
-    cherrypy.response.headers['Access-Control-Allow-Origin'] = '*'
-    cherrypy.response.headers['Access-Control-Allow-Methods'] = '*'
-    cherrypy.response.headers['Access-Control-Allow-Headers'] = '*'
-    cherrypy.response.headers['Access-Control-Max-Age'] = 3600
-
-if __name__ == "__main__":
-    # solution from http://permalink.gmane.org/gmane.comp.python.cherrypy/7530 doesn't work as expected
-    cherrypy.tools.CORS = cherrypy.Tool('before_finalize', CORS)
-    cherrypy.quickstart(PyCachedAdmin(), config={'/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
+factory = Site(PyCachedCommand())
+reactor.listenTCP(8000, factory)
+reactor.run()

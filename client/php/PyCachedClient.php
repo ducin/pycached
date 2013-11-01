@@ -7,7 +7,7 @@ namespace PyCached;
  * and manipulates cache data.
  *
  * @author Tomasz Ducin <tomasz.ducin@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 class PyCachedClient {
 

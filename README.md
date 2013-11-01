@@ -17,6 +17,7 @@ Simple key-value storage based on python/twisted. Following commands are provide
 PyCached serves following clients:
  * python
  * PHP
+ * JavaScript (must run http server)
 
 PyCached is continuously integrated with travis:
 
