@@ -1,7 +1,10 @@
-pycached
-========
+# PyCached
 
-Simple key-value storage based on python/twisted. Following commands are provided:
+PyCached is a simple key-value storage based on python/[twisted](http://twistedmatrix.com/) library.
+
+## Commands
+
+Following commands are provided:
 
 | Command       | Arguments     | Description  |
 | ------------- |:-------------:| ------------:|
@@ -14,11 +17,36 @@ Simple key-value storage based on python/twisted. Following commands are provide
 | set | key, value | sets/overwrites cache entry for a given key with a given value |
 | delete | key | deletes cache entry for a given key |
 
+## Clients
+
 PyCached serves following clients:
  * python
  * PHP
  * JavaScript (must run http server)
 
+## Tests & Continuous Integration
+
 PyCached is continuously integrated with travis:
 
 [![Build Status](https://travis-ci.org/tkoomzaaskz/pycached.png?branch=master)](https://travis-ci.org/tkoomzaaskz/pycached)
+
+## Interactive console client
+
+You may play with PyCached using interactive console client tool (just like you
+do with python interactive shell). Simply start the service and then start the
+client:
+
+    export PYTHONPATH="$PYTHONPATH:`pwd`/client/python"
+    ./run-service 8081
+    ./run-client localhost 8081
+
+Then the python shell shall open with the `client` object ready to be used:
+
+    Python 2.7.2+ (default, Jul 20 2012, 22:12:53)
+    [GCC 4.6.1] on linux2
+    Type "help", "copyright", "credits" or "license" for more information.
+    (InteractiveConsole)
+    >>> client
+    <client.PyCachedClient object at 0xb72ae34c>
+    >>> client.version()
+    u'1.2'

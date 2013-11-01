@@ -6,7 +6,9 @@ __version__ = "1.2"
 import json
 from time import mktime
 from datetime import datetime
+
 from twisted.internet import protocol
+from twisted.python import log
 
 class PyCachedEncoder(json.JSONEncoder):
     def datetime_to_string(self, d):
@@ -32,6 +34,7 @@ class PyCached(protocol.Protocol):
         self.factory = factory
         self.verbose = verbose
     def dataReceived(self, data):
+        log.msg(data)
         if self.verbose:
             print 'received: %s' % (data,)
         request = json.loads(data)
@@ -48,6 +51,7 @@ class PyCachedFactory(protocol.Factory):
         self.clear()
         self.start_time = datetime.now()
         self.verbose = verbose
+        log.msg('starts on %s, verbose=%s' % (self.start_time, self.verbose))
 
     def clear(self):
         '''
@@ -90,9 +94,12 @@ class PyCachedFactory(protocol.Factory):
 
     @status
     def handle_get(self, key):
-        item = self.data[key]
-        item[2] += 1
-        return item[0]
+        try:
+            item = self.data[key]
+            item[2] += 1
+            return item[0]
+        except KeyError:
+            return False
 
     @status
     def handle_set(self, key, value):

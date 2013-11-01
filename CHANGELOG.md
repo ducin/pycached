@@ -2,6 +2,9 @@
 
 - http access (twisted instead of cherrypy)
 - javascript client added
+- get command returns False for non-existent keys
+- logging service/http messages
+- interactive python client
 
 ## 1.1 (2013-10-26)
 
