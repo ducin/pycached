@@ -4,7 +4,7 @@ import argparse
 from twisted.internet import reactor
 from twisted.web.server import Site
 
-from server.web import PyCachedCommand
+from server.http import PyCachedCommand
 
 parser = argparse.ArgumentParser(description='Run PyCached http access.')
 parser.add_argument('port', metavar='port', type=int,

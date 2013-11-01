@@ -3,7 +3,7 @@ import argparse
 
 from twisted.internet import reactor
 
-from server.server import PyCachedFactory
+from server.service import PyCachedFactory
 
 parser = argparse.ArgumentParser(description='Run PyCached server.')
 parser.add_argument('port', metavar='port', type=int,
