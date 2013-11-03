@@ -24,12 +24,6 @@ PyCached serves following clients:
  * PHP
  * JavaScript (must run http server)
 
-## Tests & Continuous Integration
-
-PyCached is continuously integrated with travis:
-
-[![Build Status](https://travis-ci.org/tkoomzaaskz/pycached.png?branch=master)](https://travis-ci.org/tkoomzaaskz/pycached)
-
 ## Interactive console client
 
 You may play with PyCached using interactive console client tool (just like you
@@ -50,3 +44,23 @@ Then the python shell shall open with the `client` object ready to be used:
     <client.PyCachedClient object at 0xb72ae34c>
     >>> client.version()
     u'1.2'
+
+## HTTP Access
+
+### work in progress
+
+PyCached is bundled with an HTTP server that connects to the main service. This
+enables browser clients to send requests to the cache indirectly.
+
+## Tests & Continuous Integration
+
+PyCached is continuously integrated with travis:
+
+[![Build Status](https://travis-ci.org/tkoomzaaskz/pycached.png?branch=master)](https://travis-ci.org/tkoomzaaskz/pycached)
+
+Automated test execution perform following steps:
+
+ * set environment variables (pycached host and port)
+ * run the server
+ * run tests (all tests rely on the same server process)
+ * kill the server process

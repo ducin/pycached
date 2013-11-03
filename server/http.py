@@ -4,9 +4,9 @@ __license__ = "MIT"
 __version__ = "1.2"
 
 from twisted.web.resource import Resource
+from twisted.python import log
+from twisted.web.server import Site
 from client import PyCachedClient
-
-host, port = 'localhost', 12345
 
 class PyCachedCommand(Resource):
     isLeaf = True
@@ -18,10 +18,15 @@ class PyCachedCommand(Resource):
         'Access-Control-Max-Age': 3600
     }
 
-    def render_GET(self, request):
+    def getServiceClient(self):
         client = PyCachedClient()
+        client.connect(*self.service_address)
+        return client
+
+    def render_GET(self, request):
+        log.msg('GET')
         try:
-            client.connect(host, port)
+            client = self.getServiceClient()
             status = client.status()
             client.close()
             return "PyCached is up since %0.2f seconds" % (status['uptime'],)
@@ -29,8 +34,8 @@ class PyCachedCommand(Resource):
             return "PyCached is down."
 
     def render_POST(self, request):
-        client = PyCachedClient()
-        client.connect(host, port)
+        log.msg('POST %s' % (str(request.args)))
+        client = self.getServiceClient()
         kwargs = {k: v[0] for k,v in request.args.iteritems()}
         command_name = kwargs.pop('command')
         command = getattr(client, command_name)
@@ -40,3 +45,9 @@ class PyCachedCommand(Resource):
         for header, value in PyCachedCommand.cors_headers.iteritems():
             request.setHeader(header, value)
         return result
+
+class PyCachedSite(Site):
+    def __init__(self, service_address):
+        resource = PyCachedCommand()
+        resource.service_address = service_address
+        Site.__init__(self, resource)

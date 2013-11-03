@@ -2,9 +2,7 @@
 import argparse
 
 from twisted.internet import reactor
-from twisted.web.server import Site
-
-from server.http import PyCachedCommand
+from server.http import PyCachedSite
 
 parser = argparse.ArgumentParser(description='Run PyCached http access.')
 parser.add_argument('port', metavar='port', type=int,
@@ -12,6 +10,6 @@ parser.add_argument('port', metavar='port', type=int,
 args = parser.parse_args()
 
 print "Starting PyCached http access on port %d" % (args.port)
-factory = Site(PyCachedCommand())
-reactor.listenTCP(args.port, factory)
+addr = ('localhost', 8001)
+reactor.listenTCP(args.port, PyCachedSite(addr))
 reactor.run()
