@@ -17,8 +17,8 @@ install:
   - pip install -r requirements.txt --use-mirrors
 before_script:
   - source set_env.sh
-  - ./run-service.py `echo $PYCACHED_PORT` &
+  - ./run.py `echo $PYCACHED_PORT`
 script:
   - ./test.sh
 after_script:
-  - pkill -9 -f "run-service.py"
+  - ./stop.sh
