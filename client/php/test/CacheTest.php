@@ -5,7 +5,7 @@ use \PyCached\PyCachedClient;
 class CacheTest extends PHPUnit_Framework_TestCase
 {
     private function getServerAddress() {
-        return array(getenv('PYCACHED_HOST'), (int) getenv('PYCACHED_HOST'));
+        return array(getenv('PYCACHED_HOST'), (int) getenv('PYCACHED_PORT'));
     }
 
     protected function setUp() {
