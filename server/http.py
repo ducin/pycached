@@ -24,7 +24,11 @@ class PyCachedCommand(Resource):
         return client
 
     def render_GET(self, request):
+        '''
+        Renders service status as plain text.
+        '''
         log.msg('GET')
+        request.setHeader('Content-Type', 'text/plain')
         try:
             client = self.getServiceClient()
             status = client.status()
@@ -34,6 +38,9 @@ class PyCachedCommand(Resource):
             return "PyCached is down."
 
     def render_POST(self, request):
+        '''
+        Executes pycached request ad returns the response.
+        '''
         log.msg('POST %s' % (str(request.args)))
         client = self.getServiceClient()
         kwargs = {k: v[0] for k,v in request.args.iteritems()}
@@ -47,7 +54,16 @@ class PyCachedCommand(Resource):
         return result
 
 class PyCachedSite(Site):
-    def __init__(self, service_address):
+    '''
+    Performs all operations for PyCached HTTP access.
+    '''
+    def __init__(self, service_address, **kwargs):
+        '''
+        This class uses predefined Resource type (which cannot be changed).
+        Instead of Resource typ, the constructor accepts PyCached service
+        address, which is a (host, port) 2-tuple. This address is available
+        to all resources (as they conect to PyCached service each time).
+        '''
         resource = PyCachedCommand()
         resource.service_address = service_address
-        Site.__init__(self, resource)
+        Site.__init__(self, resource, **kwargs)
