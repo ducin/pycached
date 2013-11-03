@@ -8,7 +8,7 @@ from client import PyCachedClient
 class MainTest (unittest.TestCase):
 
     def getServerAddress(self):
-        return (os.getenv('PYCACHED_HOST'), os.getenv('PYCACHED_PORT'))
+        return (os.getenv('PYCACHED_HOST'), int(os.getenv('PYCACHED_PORT')))
 
     def setUp(self):
         self.client = PyCachedClient()
