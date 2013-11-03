@@ -4,9 +4,14 @@ use \PyCached\PyCachedClient;
 
 class CacheTest extends PHPUnit_Framework_TestCase
 {
+    private function getServerAddress() {
+        return array(getenv('PYCACHED_HOST'), (int) getenv('PYCACHED_HOST'));
+    }
+
     protected function setUp() {
         $this->client = new PyCachedClient;
-        $this->client->connect('localhost', 12345);
+        list($host, $port) = $this->getServerAddress();
+        $this->client->connect($host, $port);
         $this->client->clear();
     }
 

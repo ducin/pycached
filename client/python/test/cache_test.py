@@ -1,12 +1,18 @@
+import os
 import unittest
 from time import time
 import string, random
+
 from client import PyCachedClient
 
 class MainTest (unittest.TestCase):
+
+    def getServerAddress(self):
+        return (os.getenv('PYCACHED_HOST'), os.getenv('PYCACHED_PORT'))
+
     def setUp(self):
         self.client = PyCachedClient()
-        self.client.connect('localhost', 12345)
+        self.client.connect(*self.getServerAddress())
         self.client.clear()
 
     def tearDown(self):
