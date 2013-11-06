@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import argparse
-import code
+import code, readline, rlcompleter
 
 from client import PyCachedClient
 
@@ -18,5 +18,7 @@ client.connect(args.host, args.port)
 # open interactive shell
 vars = globals()
 vars.update(locals())
+readline.set_completer(rlcompleter.Completer(vars).complete)
+readline.parse_and_bind("tab: complete")
 shell = code.InteractiveConsole(vars)
 shell.interact()
