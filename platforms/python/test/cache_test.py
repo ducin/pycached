@@ -3,7 +3,7 @@ import unittest
 from time import time
 import string, random
 
-from client import PyCachedClient
+from client.client import PyCachedClient
 
 class MainTest (unittest.TestCase):
 

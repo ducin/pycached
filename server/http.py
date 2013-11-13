@@ -1,7 +1,7 @@
 __author__ = "Tomasz Ducin"
 __email__ = "tomasz.ducin@gmail.com"
 __license__ = "MIT"
-__version__ = "1.2"
+__version__ = "0.1.2"
 
 from twisted.web.resource import Resource
 from twisted.python import log

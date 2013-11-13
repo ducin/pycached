@@ -4,7 +4,7 @@ import json
 __author__ = "Tomasz Ducin"
 __email__ = "tomasz.ducin@gmail.com"
 __license__ = "MIT"
-__version__ = "1.2"
+__version__ = "0.1.2"
 
 class PyCachedClient(object):
     def __init__(self):
