@@ -22,7 +22,7 @@ class PyCachedClient(object):
     def _receive(self):
         received = self.s.recv(1024)
         decoded = json.loads(received.rstrip('\n'))
-        return decoded['value'] if decoded.has_key('value') else None
+        return decoded['value'] if 'value' in decoded else None
 
     def _send(self, command, options={}):
         request = {'command': command}

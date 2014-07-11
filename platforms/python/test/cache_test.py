@@ -32,7 +32,7 @@ class MainTest (unittest.TestCase):
 
     def test_status(self):
         status = self.client.status()
-        self.assertTrue(status.has_key('uptime'))
+        self.assertTrue('uptime' in status)
         self.assertTrue(type(status['uptime']) is float)
 
     def test_empty(self):
