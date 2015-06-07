@@ -56,7 +56,7 @@ enables browser clients to send requests to the cache indirectly.
 
 PyCached is continuously integrated with travis:
 
-[![Build Status](https://travis-ci.org/tkoomzaaskz/pycached.png?branch=master)](https://travis-ci.org/tkoomzaaskz/pycached)
+[![Build Status](https://travis-ci.org/ducin/pycached.png?branch=master)](https://travis-ci.org/ducin/pycached)
 
 Automated test execution perform following steps:
 
