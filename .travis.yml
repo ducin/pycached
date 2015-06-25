@@ -4,7 +4,7 @@ python:
   - "2.7"
 before_install:
   - sudo apt-get update
-  - sudo apt-get install python-twisted
+  - sudo apt-get install python-twisted php5
   - sudo curl -sS https://getcomposer.org/installer | sudo php
 # sequence of phpunit installation commands
   - composer install phpunit/phpunit
