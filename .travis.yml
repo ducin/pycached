@@ -4,7 +4,8 @@ python:
   - "2.7"
 before_install:
   - sudo apt-get update
-  - sudo apt-get install python-twisted php-pear
+  - sudo apt-get install python-twisted
+  - sudo curl -sS https://getcomposer.org/installer | sudo php
 # sequence of phpunit installation commands
   - composer install phpunit/phpunit
 #  - sudo pear channel-discover pear.phpunit.de
