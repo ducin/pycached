@@ -8,6 +8,7 @@ before_install:
   - sudo curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 # sequence of phpunit installation commands
   - composer global require phpunit/phpunit
+  - composer install
 #  - sudo pear channel-discover pear.phpunit.de
 #  - sudo pear channel-discover pear.symfony-project.com
 #  - sudo pear channel-discover components.ez.no
